@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.ddxb.mapper.DdxbTeacherMapper">
+    <select id="queryTeacher" parameterType="map" resultType="map">
+        SELECT
+        id,
+        teacher_name,
+        weixin_acount,
+        head_img,
+        nick_name,
+        phone_number,
+        create_time,
+        update_time
+
+        FROM ddxb_teacher
+    </select>
+
+
+    <insert id="saveTeacher" parameterType="tech.ddxb.model.DdxbTeacher">
+       INSERT INTO ddxb_teacher(
+        id,
+        teacher_name,
+        weixin_acount,
+        head_img,
+        nick_name,
+        phone_number,
+        create_time,
+        update_time
+        )
+         VALUES (
+        #{id},
+        #{teacherName},
+        #{weixinAcount},
+        #{headImg},
+        #{nickName},
+        #{phoneNumber},
+        #{createTime},
+        #{updateTIme}
+        )
+    </insert>
+    <update id="updateTeacher" parameterType="tech.ddxb.model.DdxbTeacher">
+      UPDATE ddxb_teacher SET
+        id = #{id},
+        teacher_name = #{teacherName},
+        weixin_acount = #{weixinAcount},
+        head_img = #{headImg},
+        nick_name = #{nickName},
+        phone_number = #{phoneNumber},
+        create_time = #{createTime},
+        update_time = #{updateTIme}
+         WHERE id = #{id}
+    </update>
+</mapper>

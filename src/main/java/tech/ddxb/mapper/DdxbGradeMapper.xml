@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.ddxb.mapper.DdxbGradeMapper">
+
+    <!-- 教师查看学生各科成绩信息 -->
+    <select id="queryGradeByParams" parameterType="map" resultType="map">
+        SELECT s.teacher_id AS teacherId,s.id AS stuId,
+        s.stu_name AS stuName,g.object_name AS objectName,
+        g.finished_rate AS finishedRate,g.correct_rate AS correctRate FROM ddxb_grade g
+        RIGHT JOIN ddxb_student s ON g.stu_id = s.id
+        <where>
+            <if test="null!=teacherId and ''!=teacherId">
+                s.teacher_id = #{teacherId}
+            </if>
+            <if test="null!=objectName and ''!=objectName">
+                and g.object_name = #{objectName}
+            </if>
+        </where>
+    </select>
+
+    <insert id="saveGrade" parameterType="tech.ddxb.model.DdxbGrade">
+
+         INSERT INTO ddxb_grade(
+            id,
+            stu_id,
+            object_name,
+            score,
+            question_total,
+            question_unfinished,
+            question_error,
+            finished_rate,
+            correct_rate,
+            create_time,
+            update_time
+            )
+         VALUES (
+            #{id},
+            #{stuId},
+            #{objectName},
+            #{score},
+            #{questionTotal},
+            #{questionUnfinshed},
+            #{questionError},
+            #{finishedRate},
+            #{correctRate},
+            now(),
+            now()
+         )
+    </insert>
+
+</mapper>

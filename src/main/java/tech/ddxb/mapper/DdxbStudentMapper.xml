@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.ddxb.mapper.DdxbStudentMapper">
+
+    <!-- 教师查看学生信息 -->
+    <select id="queryStudent" parameterType="map" resultType="map">
+
+        SELECT p.id,p.name,
+        group_concat(p1.gender,"-",p1.phone_number ORDER BY p1.gender DESC) as parent
+        FROM (SELECT s.id as id,s.stu_name as name
+        FROM ddxb_student s
+        <where>
+            <if test="null!=teacherId and ''!=teacherId">
+                s.teacher_id = #{teacherId}
+            </if>
+        </where>
+        ) p LEFT JOIN ddxb_parent p1 ON p.id = p1.stu_id
+        GROUP BY p.id,p.name
+    </select>
+
+
+    <insert id="saveStudent" parameterType="tech.ddxb.model.StudentBean">
+       INSERT INTO ddxb_student(
+        id,
+        `teacher_id`,
+        `stu_name`,
+        `create_time`,
+        `update_time`
+        )
+         VALUES (
+         #{stuId},
+        #{teacherId},
+        #{stuName},
+        now(),
+        now()
+        )
+
+        INSERT INTO ddxb_parent(
+        id,
+        `stu_id`,
+        `gender`,
+        parent_name,
+        phone_number,
+        `create_time`,
+        `update_time`
+        )
+        VALUES (
+        #{parentId},
+        #{stuId},
+        #{gender},
+        #{parentName}
+        #{phoneNumber},
+        now(),
+        now()
+        )
+    </insert>
+
+    <update id="updateStudent" parameterType="tech.ddxb.model.StudentBean">
+        UPDATE ddxb_student
+        SET stu_name = #{stuName}
+        WHERE id = #{stuId}
+
+        UPDATE ddxb_parent
+        SET parent_name = #{parentName},phone_number = #{phoneNumber}
+        WHERE
+    </update>
+
+</mapper>

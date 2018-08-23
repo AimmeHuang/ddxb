@@ -1,0 +1,19 @@
+package tech.ddxb.mapper;
+
+import org.apache.ibatis.annotations.Mapper;
+import tech.ddxb.model.DdxbGrade;
+import tech.ddxb.model.DdxbStudent;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by leahhuang on 2018/7/11.
+ */
+@Mapper
+public interface DdxbGradeMapper {
+    List<Map<String, Object>> queryGradeByParams(Map<String, Object> params);
+
+    void saveGrade(DdxbGrade ddxbGrade);
+
+}
