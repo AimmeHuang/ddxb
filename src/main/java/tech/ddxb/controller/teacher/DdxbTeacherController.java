@@ -108,4 +108,20 @@ public class DdxbTeacherController extends BaseController {
         }
     }
 
+    /**
+     * 老师删除学生
+     * @param stuId
+     * @return
+     */
+    @RequestMapping(value = "deleteStudent", produces = "application/json;charset=UTF-8")
+    public RestResponse deleteStudent(Long stuId){
+        try {
+            ddxbTeacherService.deleteStudent(stuId);
+            return this.getSuccessResponse("删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return this.getFailResponse("删除失败");
+        }
+    }
+
 }

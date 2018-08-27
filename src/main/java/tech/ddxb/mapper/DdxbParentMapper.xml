@@ -22,9 +22,9 @@
         #{headImg},
         #{nickName},
         #{gender},
-        #{parentName}
+        #{parentName},
         #{phoneNumber},
-        now(),
+        #{createTime},
         #{updateTime}
         )
     </insert>
@@ -38,7 +38,7 @@
         gender = #{gender},
         parent_name = #{parentName},
         phone_number = #{phoneNumber},
-        update_time = now()
+        update_time = #{updateTime}
         WHERE id = #{id}
     </update>
 

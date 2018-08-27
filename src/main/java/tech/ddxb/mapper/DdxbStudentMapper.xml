@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tech.ddxb.mapper.DdxbStudentMapper">
 
-    <!-- 教师查看学生信息 -->
+    <!-- 教师查看学生信息
     <select id="queryStudent" parameterType="map" resultType="map">
 
         SELECT p.id,p.name,
@@ -16,6 +16,17 @@
         </where>
         ) p LEFT JOIN ddxb_parent p1 ON p.id = p1.stu_id
         GROUP BY p.id,p.name
+    </select>
+    -->
+    <select id="queryStudent" parameterType="map" resultType="map">
+        SELECT
+        id as id,
+        `teacher_id` as teacherId,
+        `stu_name` as stuName,
+        `father_phone` as fatherPhone,
+        `mother_phone` as motherPhone
+        FROM ddxb_student
+        WHERE teacher_id = #{teacherId}
     </select>
 
 
@@ -64,5 +75,10 @@
         FROM ddxb_student
         WHERE id = #{id}
     </select>
+
+    <delete id="deleteStudent" parameterType="long">
+        DELETE FROM ddxb_student
+        WHERE id = #{stuId}
+    </delete>
 
 </mapper>

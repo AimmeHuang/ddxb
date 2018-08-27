@@ -18,4 +18,6 @@ public interface DdxbStudentMapper {
     void updateStudent(DdxbStudent student);
 
     DdxbStudent getDdxbStudentById(Long id);
+
+    void deleteStudent(Long stuId);
 }
