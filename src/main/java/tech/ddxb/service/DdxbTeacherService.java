@@ -1,9 +1,12 @@
 package tech.ddxb.service;
 
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tech.ddxb.mapper.DdxbGradeMapper;
+import tech.ddxb.mapper.DdxbParentMapper;
 import tech.ddxb.mapper.DdxbStudentMapper;
 import tech.ddxb.mapper.DdxbTeacherMapper;
 import tech.ddxb.model.*;
@@ -11,6 +14,10 @@ import tech.ddxb.utils.KeyWorker;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -22,6 +29,8 @@ public class DdxbTeacherService {
     private DdxbStudentMapper ddxbStudentMapper;
     @Autowired
     private DdxbGradeMapper ddxbGradeMapper;
+    @Autowired
+    private DdxbParentMapper ddxbParentMapper;
 
 
     /**
@@ -141,16 +150,143 @@ public class DdxbTeacherService {
     /**
      * 添加学生信息
      *
-     * @param studentBean
+     * @param portalStudent
      */
-    public void saveStudent(StudentBean studentBean) {
-        if (null != studentBean.getStuId()) {
-            //修改
-            ddxbStudentMapper.updateStudent(studentBean);
+    @Transactional
+    public void saveStudent(StudentBean portalStudent) {
+        DdxbStudent student = new DdxbStudent();
+        if (null != portalStudent.getStuId()) {
+            //修改学生信息
+            student = ddxbStudentMapper.getDdxbStudentById(portalStudent.getStuId());
+            student.setTeacherId(portalStudent.getTeacherId());
+            student.setStuName(portalStudent.getStuName());
+            student.setFatherPhone(portalStudent.getFatherPhone());
+            student.setMotherPhone(portalStudent.getMotherPhone());
+            ddxbStudentMapper.updateStudent(student);
+            //保存家长电话信息
+            updateParentByStuId(student);
+
         } else {
             //添加
-            ddxbStudentMapper.saveStudent(studentBean);
+            student.setId(KeyWorker.nextId());
+            student.setTeacherId(portalStudent.getTeacherId());
+            student.setStuName(portalStudent.getStuName());
+            student.setFatherPhone(portalStudent.getFatherPhone());
+            student.setMotherPhone(portalStudent.getMotherPhone());
+            ddxbStudentMapper.saveStudent(student);
+            //保存家长电话信息
+            updateParentByStuId(student);
         }
 
+    }
+
+    /**
+     * 老师修改学生家长信息
+     * @param student
+     */
+    public void updateParentByStuId(DdxbStudent student){
+        List<DdxbParent> parentList = ddxbParentMapper.getDdxbParentByStuId(student.getId());
+        //家长跟学生已绑定关系
+        if (null != parentList && parentList.size() > 0) {
+            for (int i = 0; i < parentList.size(); i++) {//建立关联
+                DdxbParent parent = parentList.get(i);
+                if ("M".equals(parent.getGender())) {
+                    parent.setParentName(student.getFatherPhone());
+                }
+                if ("F".equals(parent.getGender())) {
+                    parent.setParentName(student.getMotherPhone());
+                }
+                //（只会修改学生家长信息）
+                if (null != parent.getId()) {
+                    ddxbParentMapper.updateParent(parent);
+                }
+            }
+        } else {//家长跟学生未绑定关系
+            DdxbParent parent = new DdxbParent();//这里的家长信息不应该只是一个空对象
+            parent.setStuId(student.getId());
+
+            /*
+            目前的情况是，假装家长信息不存在，
+            因为家长跟学生未绑定关系，
+            缺少一个契机，将家长和学生在后台绑定
+             */
+            //只能是添加parent信息
+            if (StringUtils.isNotBlank(student.getFatherPhone()) || StringUtils.isNotBlank(student.getMotherPhone())) {
+                if (null == parent.getId()) {
+                    parent.setId(KeyWorker.nextId());
+                    if (StringUtils.isNotBlank(student.getFatherPhone())) {
+                        parent.setGender("M");
+                        parent.setPhoneNumber(student.getFatherPhone());
+                    }
+                    if (StringUtils.isNotBlank(student.getMotherPhone())) {
+                        parent.setGender("F");
+                        parent.setPhoneNumber(student.getMotherPhone());
+                    }
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String nowStr = now .format(format);
+
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    try {
+                        Date date = sdf.parse(nowStr);
+                        parent.setUpdateTime(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    ddxbParentMapper.saveParent(parent);
+                }
+            }
+            if (StringUtils.isNotBlank(student.getFatherPhone()) && StringUtils.isNotBlank(student.getMotherPhone())) {
+                if (null == parent.getId()) {
+                    parent.setId(KeyWorker.nextId());
+                    if (StringUtils.isNotBlank(student.getFatherPhone())) {
+                        parent.setGender("M");
+                        parent.setPhoneNumber(student.getFatherPhone());
+                    }
+                    ddxbParentMapper.saveParent(parent);
+                }
+                if (null == parent.getId()) {
+                    parent.setId(KeyWorker.nextId());
+                    if (StringUtils.isNotBlank(student.getMotherPhone())) {
+                        parent.setGender("F");
+                        parent.setPhoneNumber(student.getMotherPhone());
+                    }
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String nowStr = now .format(format);
+
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    try {
+                        Date date = sdf.parse(nowStr);
+                        parent.setUpdateTime(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    ddxbParentMapper.saveParent(parent);
+                }
+            }
+        }
+    }
+
+    /**
+     * 根据student的状态，保存parent
+     * @param student
+     */
+    public void saveParent(DdxbStudent student, DdxbParent parent){
+        if ("M".equals(parent.getGender())) {
+            parent.setParentName(student.getFatherPhone());
+        }
+        if ("F".equals(parent.getGender())) {
+            parent.setParentName(student.getMotherPhone());
+        }
+
+        if (null != parent.getId()) {
+            ddxbParentMapper.updateParent(parent);
+        } else {
+            parent.setId(KeyWorker.nextId());
+            ddxbParentMapper.saveParent(parent);
+        }
     }
 }
