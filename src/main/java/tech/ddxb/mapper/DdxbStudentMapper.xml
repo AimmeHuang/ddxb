@@ -19,50 +19,50 @@
     </select>
 
 
-    <insert id="saveStudent" parameterType="tech.ddxb.model.StudentBean">
+    <insert id="saveStudent" parameterType="tech.ddxb.model.DdxbStudent">
        INSERT INTO ddxb_student(
         id,
         `teacher_id`,
         `stu_name`,
+        `father_phone`,
+        `mother_phone`,
         `create_time`,
         `update_time`
         )
          VALUES (
-         #{stuId},
+        #{id},
         #{teacherId},
         #{stuName},
+        #{fatherPhone},
+        #{motherPhone},
         now(),
         now()
         )
 
-        INSERT INTO ddxb_parent(
-        id,
-        `stu_id`,
-        `gender`,
-        parent_name,
-        phone_number,
-        `create_time`,
-        `update_time`
-        )
-        VALUES (
-        #{parentId},
-        #{stuId},
-        #{gender},
-        #{parentName}
-        #{phoneNumber},
-        now(),
-        now()
-        )
     </insert>
 
-    <update id="updateStudent" parameterType="tech.ddxb.model.StudentBean">
+    <update id="updateStudent" parameterType="tech.ddxb.model.DdxbStudent">
         UPDATE ddxb_student
-        SET stu_name = #{stuName}
-        WHERE id = #{stuId}
-
-        UPDATE ddxb_parent
-        SET parent_name = #{parentName},phone_number = #{phoneNumber}
-        WHERE
+        SET
+        teacher_id = #{teacherId},
+        stu_name = #{stuName},
+        father_phone = #{fatherPhone},
+        mother_phone = #{motherPhone},
+        update_time = now()
+        WHERE id = #{id}
     </update>
+
+    <select id="getDdxbStudentById" parameterType="long" resultType="tech.ddxb.model.DdxbStudent">
+        SELECT
+        id as id,
+        teacher_id as teacherId,
+        stu_name as stuName,
+        father_phone as fatherPhone,
+        mother_phone as motherPhone,
+        create_time as createTime,
+        update_time as updateTime
+        FROM ddxb_student
+        WHERE id = #{id}
+    </select>
 
 </mapper>

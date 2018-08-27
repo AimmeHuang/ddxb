@@ -2,7 +2,6 @@ package tech.ddxb.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import tech.ddxb.model.DdxbStudent;
-import tech.ddxb.model.StudentBean;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,9 @@ import java.util.Map;
 public interface DdxbStudentMapper {
     List<Map<String, Object>> queryStudent(Map<String, Object> params);
 
-    void saveStudent(StudentBean student);
+    void saveStudent(DdxbStudent student);
 
-    void updateStudent(StudentBean studentBean);
+    void updateStudent(DdxbStudent student);
+
+    DdxbStudent getDdxbStudentById(Long id);
 }

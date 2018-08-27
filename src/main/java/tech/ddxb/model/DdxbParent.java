@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL) // 不序列化空值，既是json中不显示值为空的键值对
 public class DdxbParent implements Serializable {
@@ -16,8 +17,8 @@ public class DdxbParent implements Serializable {
     private String parentName;
     private String gender;//F表示母亲，M表示父亲
     private String phoneNumber;
-    private Timestamp createTime;
-    private Timestamp updateTime;
+    private Date createTime;
+    private Date updateTime;
 
     public Long getId() {
         return id;
@@ -84,20 +85,20 @@ public class DdxbParent implements Serializable {
     }
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public Timestamp getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 }

@@ -11,6 +11,8 @@ public class DdxbStudent implements Serializable {
     private Long id;
     private Long teacherId;
     private String stuName;
+    private String fatherPhone;
+    private String motherPhone;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -36,6 +38,22 @@ public class DdxbStudent implements Serializable {
 
     public void setStuName(String stuName) {
         this.stuName = stuName;
+    }
+
+    public String getFatherPhone() {
+        return fatherPhone;
+    }
+
+    public void setFatherPhone(String fatherPhone) {
+        this.fatherPhone = fatherPhone;
+    }
+
+    public String getMotherPhone() {
+        return motherPhone;
+    }
+
+    public void setMotherPhone(String motherPhone) {
+        this.motherPhone = motherPhone;
     }
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

@@ -2,30 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tech.ddxb.mapper.DdxbParentMapper">
 
-    <insert id="saveParent" parameterType="tech.ddxb.model.DdxbStudent">
-       INSERT INTO ddxb_student(
+    <insert id="saveParent" parameterType="tech.ddxb.model.DdxbParent">
+       INSERT INTO ddxb_parent(
         id,
-        `stu_id`,
-        `weixin_acount`,
+        stu_id,
+        weixin_acount,
         `head_img`,
         `nick_name`,
         `gender`,
         `parent_name`,
         `phone_number`,
         `create_time`,
-        `update_t_ime`
+        `update_time`
         )
-         VALUES (
-         #{id},
-        #{teacherId},
-        #{stuName},
+        VALUES (
+        #{id},
+        #{stuId},
+        #{weixinAcount},
+        #{headImg},
+        #{nickName},
+        #{gender},
+        #{parentName}
+        #{phoneNumber},
         now(),
-        now
+        #{updateTime}
         )
     </insert>
 
-    <update id="updateParent">
-
+    <update id="updateParent" parameterType="tech.ddxb.model.DdxbParent">
+        UPDATE ddxb_parent
+        SET
+        weixin_acount = #{weixinAcount},
+        head_img = #{headImg},
+        nick_name = #{nickName},
+        gender = #{gender},
+        parent_name = #{parentName},
+        phone_number = #{phoneNumber},
+        update_time = now()
+        WHERE id = #{id}
     </update>
+
+    <select id="getDdxbParentByStuId" resultType="tech.ddxb.model.DdxbParent" parameterType="long">
+        SELECT
+        id as id,
+        stu_id as stuId,
+        weixin_acount as weixinAcount,
+        head_img as headImg,
+        nick_name as nickName,
+        gender as gender,
+        parent_name as parentName,
+        phone_number as phoneNumber,
+        create_time as createTime,
+        update_time as updateTime
+        FROM ddxb_parent
+        WHERE stu_id = #{stuId}
+    </select>
 
 </mapper>

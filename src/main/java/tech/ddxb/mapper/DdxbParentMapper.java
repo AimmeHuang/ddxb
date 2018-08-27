@@ -16,4 +16,6 @@ public interface DdxbParentMapper {
     void saveParent(DdxbParent parent);
 
     void updateParent(DdxbParent parent);
+
+    List<DdxbParent> getDdxbParentByStuId(Long stuId);
 }

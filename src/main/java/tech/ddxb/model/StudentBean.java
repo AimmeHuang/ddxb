@@ -1,7 +1,6 @@
 package tech.ddxb.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 /**
  * Created by leahhuang on 2018/8/20.
@@ -10,10 +9,8 @@ public class StudentBean implements Serializable {
     private Long stuId;
     private Long teacherId;
     private String stuName;
-    private Long parentId;
-    private String gender;
-    private String parentName;
-    private String phoneNumber;
+    private String fatherPhone;
+    private String motherPhone;
 
 
     public Long getStuId() {
@@ -40,35 +37,19 @@ public class StudentBean implements Serializable {
         this.stuName = stuName;
     }
 
-    public Long getParentId() {
-        return parentId;
+    public String getFatherPhone() {
+        return fatherPhone;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
+    public void setFatherPhone(String fatherPhone) {
+        this.fatherPhone = fatherPhone;
     }
 
-    public String getGender() {
-        return gender;
+    public String getMotherPhone() {
+        return motherPhone;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getParentName() {
-        return parentName;
-    }
-
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setMotherPhone(String motherPhone) {
+        this.motherPhone = motherPhone;
     }
 }
