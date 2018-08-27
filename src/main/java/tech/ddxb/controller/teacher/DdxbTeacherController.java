@@ -91,11 +91,19 @@ public class DdxbTeacherController extends BaseController {
         }
     }
 
+    /**
+     * 老师添加学生信息
+     *
+     * @param studentBean
+     * @return
+     */
+    @RequestMapping(value = "saveStudent", produces = "application/json;charset=UTF-8")
     public RestResponse saveStudent(StudentBean studentBean) {
         try {
             ddxbTeacherService.saveStudent(studentBean);
             return this.getSuccessResponse("保存成功");
         } catch (Exception e) {
+            e.printStackTrace();
             return this.getFailResponse("保存失败");
         }
     }
